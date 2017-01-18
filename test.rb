@@ -3,7 +3,7 @@ require 'xcprofiler'
 require 'influxdb'
 include Xcprofiler
 
-INFLUX_DB_TABLE_NAME = 'test1'
+INFLUX_DB_TABLE_NAME = 'test4'
 
 class InfluxDBReporter < AbstractReporter
   def report!(executions)
@@ -30,24 +30,23 @@ class InfluxDBReporter < AbstractReporter
     # print(payload)
     # client.write_point(INFLUX_DB_TABLE_NAME, {values: payload})
 
-    data = {
-      :value => rand(10000) + 1,
-      :time => Time.now.to_i
-    }
-    print(data)
-    client.write_point(INFLUX_DB_TABLE_NAME, data)
+    # data = {
+    #   :value => rand(10000) + 1,
+    #   :time => Time.now.to_i
+    # }
+    # print(data)
+    # client.write_point(INFLUX_DB_TABLE_NAME, data)
 
-    # executions.each do |e|
-    #   data = {
-    #     :filename => e.filename,
-    #     :line => e.line,
-    #     :column => e.column,
-    #     :method_name => e.method_name,
-    #     :time => e.time
-    #   }
-    #   print(data)
-    #   client.write_point(INFLUX_DB_TABLE_NAME, data)
-    # end
+    executions.each do |e|
+
+      data = {
+        values: { filename: e.filename,line: e.line,column:e.column,method_name:e.method_name,how_long:e.time },
+        tags:   { file_point: e.filename + '_' + e.line.to_s} # tags are optional
+      }
+
+      print(data)
+      client.write_point(INFLUX_DB_TABLE_NAME, data)
+    end
 
 
   end

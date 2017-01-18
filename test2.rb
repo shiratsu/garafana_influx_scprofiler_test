@@ -21,5 +21,14 @@ data = {
 
 influxdb.write_point(name, data)
 
+data = {
+  values: { value: 0,aaaaa: "testtest" },
+  tags:   { wave: 'sine' }, # tags are optional
+  timestamp: Time.now.to_i # timestamp is optional, if not provided point will be saved with current time
+}
+
+influxdb.write_point(name, data)
+
+
 # or in a method call:
 influxdb.write_point(name, data, time_precision)
